@@ -5,25 +5,28 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
+	handson "postgres-mastery"
 )
 
 func main() {
+	ctx := context.Background()
 
-	conn, err := pgx.Connect(
-		context.Background(),
-		"postgres://ibrahim:123456@localhost:5432/teamsync",
-	)
-
+	cfg, err := handson.LoadConfig()
 	if err != nil {
 		panic(err)
 	}
 
-	defer conn.Close(context.Background())
+	conn, err := pgx.Connect(ctx, cfg.DatabaseURL())
+	if err != nil {
+		panic(err)
+	}
+
+	defer conn.Close(ctx)
 
 	var version string
 
 	err = conn.QueryRow(
-		context.Background(),
+		ctx,
 		"SELECT version()",
 	).Scan(&version)
 
