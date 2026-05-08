@@ -60,6 +60,7 @@ with `pgx`.
 
 ## Notes
 
+- [Documentation Workflow](<Postgress-Mastery/Documentation Workflow.md>)
 - [Day 1](Postgress-Mastery/day-01)
 - [Day 2 Data Types](Postgress-Mastery/day-02/datatypes.md)
 - [Day 2 Relationships](Postgress-Mastery/day-02/relationships.md)
