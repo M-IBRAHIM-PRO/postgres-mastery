@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Welcome.md",
+                "file": "day-01/commands.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Welcome"
+              "title": "commands"
             }
           }
         ]
@@ -201,6 +201,9 @@
   },
   "active": "6c0490443ef12709",
   "lastOpenFiles": [
+    "day-01/concepts.md",
+    "day-01/FAQs.md",
+    "day-01/commands.md",
     "Welcome.md"
   ]
 }
