@@ -84,14 +84,3 @@ Purpose:
 * crash recovery
 * durability
 * replication
-
-```txt
-Cluster (ibrahim)
- └── Database (teamsync)
-      ├── auth schema
-      │    └── users table
-      │
-      ├── billing schema
-      ├── analytics schema
-      └── audit schema
-```
