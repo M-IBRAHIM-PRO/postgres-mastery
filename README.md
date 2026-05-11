@@ -21,8 +21,7 @@ hands-on practice.
 │   │   ├── migrations/
 │   │   ├── queries/
 │   │   └── seeds/
-│   ├── Makefile
-│   └── CLAUDE.md
+│   └── Makefile
 └── README.md
 ```
 
