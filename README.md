@@ -9,39 +9,69 @@ hands-on practice.
 .
 ├── Postgres-Mastery/
 │   ├── day-01/
-│   └── day-02/
+│   ├── day-02/
+│   ├── day-03/
+│   └── day-04/
 ├── hands-on/
-│   ├── cmd/main.go
+│   ├── cmd/api/main.go
 │   ├── config.go
 │   ├── internal/users/
-│   └── sql/
+│   ├── scripts/migrate.sh
+│   ├── sql/
+│   │   ├── migrations/
+│   │   ├── queries/
+│   │   └── seeds/
+│   ├── Makefile
+│   └── CLAUDE.md
 └── README.md
 ```
 
 ## Current Focus
 
-Day 3 shifts the project from schema design into production-style data access:
+Day 4 shifts from raw SQL files to controlled schema migrations and adds three
+new tables to the SaaS schema:
 
 ```txt
 teamsync database
 ├── auth
-│   ├── organizations
 │   ├── users
-│   └── memberships
-└── projects
-    └── projects
+│   ├── organizations
+│   ├── memberships
+│   └── invitations
+├── projects
+│   ├── projects
+│   └── tasks
+└── events
+    └── activity_log   ← partitioned by occurred_at
 ```
 
 Main ideas:
 
-- PostgreSQL schemas organize application areas.
-- JOINs reconstruct application data across related tables.
-- constraints protect data integrity close to the database.
-- indexes improve common lookup and join paths.
-- transactions keep multi-step writes consistent.
-- parameterized Go queries safely read real data from the schema.
+- `golang-migrate` manages schema changes as numbered, reversible SQL files.
+- Every `up.sql` uses `IF NOT EXISTS`; every `down.sql` uses `IF EXISTS CASCADE`.
+- `auth.invitations` models the user invite flow with token, status, and expiry.
+- `projects.tasks` tracks work items with assignee and status lifecycle.
+- `events.activity_log` is a high-volume append-only table, partitioned by `RANGE (occurred_at)`.
+- A default partition catches all rows until named monthly partitions are added.
 
 ## Hands-On
+
+Migration flow:
+
+```bash
+cd hands-on
+make migrate-up                  # apply all migrations
+make migrate-down                # roll back 1 step
+make migrate-down STEPS=3        # roll back N steps
+make migrate-force VERSION=4     # fix dirty state
+```
+
+Run and build:
+
+```bash
+make run     # go run ./cmd/api
+make build   # go build -o bin/api ./cmd/api
+```
 
 SQL files:
 
@@ -49,30 +79,7 @@ SQL files:
 - [day-02.sql](hands-on/sql/queries/day-02.sql)
 - [day-03.sql](hands-on/sql/queries/day-03.sql)
 - [day-03 seed](hands-on/sql/seeds/day-03.sql)
-
-Suggested local flow:
-
-```bash
-psql -d teamsync -f hands-on/sql/queries/day-02.sql
-psql -d teamsync -f hands-on/sql/seeds/day-03.sql
-cd hands-on
-go run cmd/main.go
-```
-
-Run the Go app:
-
-```bash
-cd hands-on
-go run cmd/main.go
-```
-
-The app loads database config from `hands-on/.env`, connects with `pgx`, then:
-
-- finds one user by email
-- lists the members of organization `1`
-
-Both repository queries use PostgreSQL parameters like `$1` rather than string
-concatenation.
+- [day-04 seed](hands-on/sql/seeds/day-04.sql)
 
 ## Notes
 
@@ -86,3 +93,8 @@ concatenation.
 - [Day 3 JOINs](Postgres-Mastery/day-03/joins.md)
 - [Day 3 Indexing](Postgres-Mastery/day-03/indexing.md)
 - [Day 3 Transactions](Postgres-Mastery/day-03/transactions.md)
+- [Day 4 Architecture](<Postgres-Mastery/day-04/day-04 - Architecture.md>)
+- [Day 4 Migrations](Postgres-Mastery/day-04/migrations.md)
+- [Day 4 New Tables](Postgres-Mastery/day-04/new-tables.md)
+- [Day 4 Partitioning](Postgres-Mastery/day-04/partitioning.md)
+- [Day 4 FAQs](<Postgres-Mastery/day-04/day-04 - FAQs.md>)

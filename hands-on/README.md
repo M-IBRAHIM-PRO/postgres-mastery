@@ -2,24 +2,36 @@
 
 This folder contains the runnable code for the PostgreSQL learning project.
 
-The current exercise now covers the Day 3 workflow: create the schema, load
-seed data, practice SQL queries, and run a small Go app that fetches real rows
-from PostgreSQL.
+Day 4 introduces controlled schema migrations with `golang-migrate` and adds
+three new tables: `auth.invitations`, `projects.tasks`, and a partitioned
+`events.activity_log`.
 
 ## Structure
 
 ```txt
 hands-on/
 ├── cmd/
-│   └── main.go
-├── go.mod
-├── go.sum
+│   └── api/
+│       └── main.go
+├── scripts/
+│   └── migrate.sh
 ├── internal/
 │   └── users/
 ├── sql/
+│   ├── migrations/
+│   │   ├── 000001_init_extensions_and_schemas.{up,down}.sql
+│   │   ├── 000002_create_auth_tables.{up,down}.sql
+│   │   ├── 000003_create_projects_tables.{up,down}.sql
+│   │   ├── 000004_add_auth_invitations.{up,down}.sql
+│   │   ├── 000005_add_projects_tasks.{up,down}.sql
+│   │   └── 000006_add_events_activity_log.{up,down}.sql
 │   ├── queries/
 │   └── seeds/
-└── README.md
+├── CLAUDE.md
+├── Makefile
+├── config.go
+├── go.mod
+└── go.sum
 ```
 
 The matching notes are in:
@@ -28,6 +40,7 @@ The matching notes are in:
 ../Postgres-Mastery/day-01/
 ../Postgres-Mastery/day-02/
 ../Postgres-Mastery/day-03/
+../Postgres-Mastery/day-04/
 ```
 
 ## Current Exercise
@@ -35,41 +48,35 @@ The matching notes are in:
 - Language: Go
 - Module: `postgres-mastery`
 - PostgreSQL driver: `github.com/jackc/pgx/v5`
+- Migration tool: `golang-migrate` CLI
 - Database: `teamsync`
-- Entry point: `cmd/main.go`
-- SQL setup: `sql/queries/day-02.sql`
-- SQL practice: `sql/queries/day-03.sql`
-- Seed data: `sql/seeds/day-03.sql`
+- Entry point: `cmd/api/main.go`
 
 ## Target Database Shape
-
-Day 3 works with a small SaaS-style schema:
 
 ```txt
 teamsync database
 ├── auth
-│   ├── organizations
 │   ├── users
-│   └── memberships
-└── projects
-    └── projects
+│   ├── organizations
+│   ├── memberships
+│   └── invitations
+├── projects
+│   ├── projects
+│   └── tasks
+└── events
+    └── activity_log   ← partitioned by occurred_at
 ```
-
-This gives you enough structure to practice:
-
-- joins across users, memberships, organizations, and projects
-- constraints like `PRIMARY KEY`, `UNIQUE`, and `FOREIGN KEY`
-- indexes on common lookup columns
-- transactions for multi-step writes
 
 ## Prerequisites
 
 - PostgreSQL running locally
 - Go installed
+- `golang-migrate` CLI installed
 - A database named `teamsync`
 - A PostgreSQL role that can connect to `teamsync`
 
-The app reads these values from `hands-on/.env`:
+The app and migration script read config from `hands-on/.env`:
 
 ```txt
 DB_HOST=localhost
@@ -79,25 +86,27 @@ DB_PASSWORD=your_password
 DB_NAME=teamsync
 ```
 
-Change them to match your local PostgreSQL setup.
-
 ## Setup The Database
-
-From the repo root:
-
-```bash
-psql -d teamsync -f hands-on/sql/queries/day-02.sql
-psql -d teamsync -f hands-on/sql/seeds/day-03.sql
-```
-
-This creates the Day 2 schema and loads repeatable Day 3 practice data.
-
-## Run The App
 
 From the `hands-on` directory:
 
 ```bash
-go run cmd/main.go
+make migrate-up
+```
+
+This applies all 6 migrations in order and creates the full schema.
+
+To load seed data:
+
+```bash
+psql "$DB_URL" -f sql/seeds/day-03.sql
+psql "$DB_URL" -f sql/seeds/day-04.sql
+```
+
+## Run The App
+
+```bash
+make run
 ```
 
 If the connection works, the app:
@@ -110,8 +119,15 @@ Organization 1 members:
 - Ali Raza <ali@teamsync.dev> role=member
 ```
 
-This confirms that Go can connect to PostgreSQL and run parameterized queries
-against the seeded schema.
+## Migration Commands
+
+```bash
+make migrate-up                  # apply all pending migrations
+make migrate-down                # roll back 1 step
+make migrate-down STEPS=3        # roll back N steps
+make migrate-force VERSION=4     # force-set version (fix dirty state)
+make migrate-create name=<slug>  # create a new up/down file pair
+```
 
 ## Useful psql Commands
 
@@ -119,37 +135,36 @@ against the seeded schema.
 \l
 \c teamsync
 \dn
-\dt
-\d auth.users
+\dt auth.*
+\dt projects.*
+\dt events.*
+\d events.activity_log
 \q
 ```
 
-For deeper SQL practice, use:
-
-- [sql/queries/day-03.sql](sql/queries/day-03.sql)
-- [sql/seeds/day-03.sql](sql/seeds/day-03.sql)
-
 ## What This Validates
 
-- The local PostgreSQL server is running
-- The `teamsync` database is reachable
-- The configured role can authenticate through `.env`
-- The Go module can use `pgx`
-- Parameterized queries can safely fetch users and organization members
-- The Day 2 schema and Day 3 seed data are usable from application code
+- Local PostgreSQL is running and reachable
+- All 6 migrations apply and roll back cleanly
+- `events.activity_log` is a partitioned table with a default partition
+- The Go module connects via `pgx` and runs parameterized queries
+- `make run` and `make build` work from the `hands-on` directory
 
 ## Related Notes
 
 - [Day 1 Concepts](../Postgres-Mastery/day-01/concepts.md)
-- [Day 1 Commands](../Postgres-Mastery/day-01/commands.md)
 - [Day 2 Relationships](../Postgres-Mastery/day-02/relationships.md)
 - [Day 3 Querying](../Postgres-Mastery/day-03/querying.md)
-- [Day 3 JOINs](../Postgres-Mastery/day-03/joins.md)
 - [Day 3 Transactions](../Postgres-Mastery/day-03/transactions.md)
+- [Day 4 Architecture](<../Postgres-Mastery/day-04/day-04 - Architecture.md>)
+- [Day 4 Migrations](../Postgres-Mastery/day-04/migrations.md)
+- [Day 4 New Tables](../Postgres-Mastery/day-04/new-tables.md)
+- [Day 4 Partitioning](../Postgres-Mastery/day-04/partitioning.md)
 
 ## Next Steps
 
-- Add a project repository for project listing queries
-- Move from raw SQL files toward migrations
+- Add repository methods for `invitations`, `tasks`, `activity_log`
+- Query `activity_log` by `event_type` and `organization_id`
+- Add named monthly partitions to `activity_log`
+- Move from single `*pgx.Conn` to a connection pool (`pgxpool`)
 - Add inserts and transactions from Go, not only reads
-- Expand the app from `users` into `organizations` and `projects`

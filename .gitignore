@@ -1,1 +1,9 @@
 .env
+
+*.zip
+
+ERD
+
+bin
+
+CLAUDE.md
