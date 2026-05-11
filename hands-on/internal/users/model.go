@@ -1,6 +1,7 @@
 package users
 
 import "time"
+
 //  ---- DB Schema
 // CREATE TABLE auth.users (
 //     id BIGSERIAL PRIMARY KEY,
@@ -24,4 +25,13 @@ type User struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time
+}
+
+type OrganizationMember struct {
+	UserID           int64
+	Email            string
+	FullName         string
+	OrganizationID   int64
+	OrganizationName string
+	Role             string
 }

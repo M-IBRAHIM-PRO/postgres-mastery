@@ -6,6 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	handson "postgres-mastery"
+	"postgres-mastery/internal/users"
 )
 
 func main() {
@@ -23,16 +24,21 @@ func main() {
 
 	defer conn.Close(ctx)
 
-	var version string
+	userRepo := users.NewRepository(conn)
 
-	err = conn.QueryRow(
-		ctx,
-		"SELECT version()",
-	).Scan(&version)
-
+	user, err := userRepo.FindByEmail(ctx, "ibrahim@teamsync.dev")
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(version)
+	members, err := userRepo.ListOrganizationMembers(ctx, 1)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Found user: %s (%s)\n", user.FullName, user.Email)
+	fmt.Println("Organization 1 members:")
+	for _, member := range members {
+		fmt.Printf("- %s <%s> role=%s\n", member.FullName, member.Email, member.Role)
+	}
 }

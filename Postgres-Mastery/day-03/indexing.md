@@ -148,3 +148,11 @@ Goal:
 Learn to ask:
 Did PostgreSQL scan everything, or did it use a better path?
 ```
+
+INDEX NOTE
+- PostgreSQL automatically creates indexes for:
+    1. PRIMARY KEY constraints
+    2. UNIQUE constraints
+- PostgreSQL does NOT automatically create indexes for:
+    1. FOREIGN KEY constraints
+
