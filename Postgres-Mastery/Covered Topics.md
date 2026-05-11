@@ -1,0 +1,71 @@
+- Cluster
+- Schemas
+- Roles
+- MVCC
+- WAL
+- List databases
+- Connect database
+- List schemas
+- List tables
+- Describe table
+- Exit
+- PostgreSQL Data Types
+- Types Used Today
+- BIGSERIAL vs UUID
+- BIGSERIAL vs BIGINT
+- TIMESTAMP vs TIMESTAMPTZ
+- TEXT vs VARCHAR
+- JSONB
+- Practical Defaults
+- Other PostgreSQL Types Exist
+- PostgreSQL Relationships
+- The Tables In This Schema
+- Primary Keys
+- Foreign Keys
+- One-To-Many
+- Another One-To-Many: User Created Projects
+- Many-To-Many
+- Join Table: memberships
+- Why UNIQUE Matters In memberships
+- Relationship Diagram
+- How To Think About Deletes
+- Soft Deletes
+- Common Query Patterns
+- Practical Design Rules
+- Final Memory Map
+- PostgreSQL Querying
+- Data Manipulation
+- SELECT Basics
+- Filtering Patterns
+- Practical Query Patterns
+- Querying Mindset
+- PostgreSQL JOINs
+- Why JOINs Matter
+- INNER JOIN
+- LEFT JOIN
+- Multi-Table JOINs
+- Reliable JOIN Rules
+- Common Day 3 JOIN Patterns
+- PostgreSQL Constraints
+- Why Constraints Matter
+- NOT NULL
+- UNIQUE
+- CHECK
+- DEFAULT
+- REFERENCES
+- ON DELETE Behavior
+- Constraint Mindset
+- PostgreSQL Indexing
+- What An Index Is
+- Basic Index
+- Composite Index
+- UNIQUE Index
+- When Indexes Help
+- When Too Many Indexes Hurt
+- EXPLAIN Basics
+- PostgreSQL Transactions
+- Why Transactions Matter
+- Core Commands
+- SaaS Example
+- Why Transactions Fit Day 3
+- Beginner Rules
