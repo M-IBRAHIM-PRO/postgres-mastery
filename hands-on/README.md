@@ -27,7 +27,6 @@ hands-on/
 │   │   └── 000006_add_events_activity_log.{up,down}.sql
 │   ├── queries/
 │   └── seeds/
-├── CLAUDE.md
 ├── Makefile
 ├── config.go
 ├── go.mod
