@@ -11,7 +11,8 @@ hands-on practice.
 │   ├── day-01/
 │   ├── day-02/
 │   ├── day-03/
-│   └── day-04/
+│   ├── day-04/
+│   └── day-05/
 ├── hands-on/
 │   ├── cmd/api/main.go
 │   ├── config.go
@@ -27,31 +28,17 @@ hands-on practice.
 
 ## Current Focus
 
-Day 4 shifts from raw SQL files to controlled schema migrations and adds three
-new tables to the SaaS schema:
+Day 5 covers advanced read-only SQL on the existing `teamsync` schema — no new
+tables, just deeper query power.
 
-```txt
-teamsync database
-├── auth
-│   ├── users
-│   ├── organizations
-│   ├── memberships
-│   └── invitations
-├── projects
-│   ├── projects
-│   └── tasks
-└── events
-    └── activity_log   ← partitioned by occurred_at
-```
+Topics:
 
-Main ideas:
-
-- `golang-migrate` manages schema changes as numbered, reversible SQL files.
-- Every `up.sql` uses `IF NOT EXISTS`; every `down.sql` uses `IF EXISTS CASCADE`.
-- `auth.invitations` models the user invite flow with token, status, and expiry.
-- `projects.tasks` tracks work items with assignee and status lifecycle.
-- `events.activity_log` is a high-volume append-only table, partitioned by `RANGE (occurred_at)`.
-- A default partition catches all rows until named monthly partitions are added.
+- **CTE (`WITH`)** — name intermediate steps, reuse subqueries, write data-modifying CTEs with `RETURNING`.
+- **Recursive CTE** — tree/hierarchy traversal (org charts, threaded comments), with `UNION ALL`, termination, and the `CYCLE` clause.
+- **Window functions** — `ROW_NUMBER`, `RANK`, `DENSE_RANK`, `LAG`, `LEAD`; the latest-row-per-group and top-N-per-group patterns.
+- **`OVER (PARTITION BY … ORDER BY …)`** — partition / order / frame mental model; the default-frame trap (`ORDER BY` silently turns sum into running sum).
+- **`GROUPING SETS` / `ROLLUP` / `CUBE`** — multi-level subtotals in one query; `GROUPING()` to separate structural `NULL` from real `NULL`.
+- **`FILTER (WHERE …)`** — per-aggregate condition; pivot rows to columns; replaces the old `COUNT(CASE WHEN … THEN 1 END)` trick.
 
 ## Hands-On
 
@@ -77,8 +64,10 @@ SQL files:
 - [day-01.sql](hands-on/sql/queries/day-01.sql)
 - [day-02.sql](hands-on/sql/queries/day-02.sql)
 - [day-03.sql](hands-on/sql/queries/day-03.sql)
+- [day-05.sql](hands-on/sql/queries/day-05.sql)
 - [day-03 seed](hands-on/sql/seeds/day-03.sql)
 - [day-04 seed](hands-on/sql/seeds/day-04.sql)
+- [day-05 seed](hands-on/sql/seeds/day-05.sql)
 
 ## Notes
 
@@ -97,3 +86,11 @@ SQL files:
 - [Day 4 New Tables](Postgres-Mastery/day-04/new-tables.md)
 - [Day 4 Partitioning](Postgres-Mastery/day-04/partitioning.md)
 - [Day 4 FAQs](<Postgres-Mastery/day-04/day-04 - FAQs.md>)
+- [Day 5 CTE](Postgres-Mastery/day-05/CTE.md)
+- [Day 5 Recursive CTE](Postgres-Mastery/day-05/recursiveCTE.md)
+- [Day 5 Window Functions](Postgres-Mastery/day-05/windowFunctions.md)
+- [Day 5 OVER Clause](Postgres-Mastery/day-05/overClause.md)
+- [Day 5 Multi-Level Aggregation](Postgres-Mastery/day-05/multi-levelAggregation.md)
+- [Day 5 FILTER on Aggregates](Postgres-Mastery/day-05/filterOnAggregates.md)
+- [Day 5 Cheatsheet](Postgres-Mastery/day-05/cheatsheet.md)
+- [Day 5 FAQs](<Postgres-Mastery/day-05/day-05 - FAQs.md>)
