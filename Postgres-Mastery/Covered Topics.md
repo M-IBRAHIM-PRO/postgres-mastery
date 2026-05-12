@@ -46,6 +46,7 @@
 - Multi-Table JOINs
 - Reliable JOIN Rules
 - Common Day 3 JOIN Patterns
+- Beginner Mistakes
 - PostgreSQL Constraints
 - Why Constraints Matter
 - NOT NULL
@@ -69,3 +70,56 @@
 - SaaS Example
 - Why Transactions Fit Day 3
 - Beginner Rules
+- Database Migrations
+- Why golang-migrate
+- How It Works
+- File Naming
+- Safe Up Migrations
+- Safe Down Migrations
+- Makefile Commands
+- Dirty State
+- Current Migration History
+- New Tables — Day 4
+- auth.invitations
+- projects.tasks
+- events.activity_log
+- Seed Data
+- Table Partitioning
+- Why Partitioning
+- PARTITION BY RANGE
+- Partition-Ready Shape
+- Default Partition
+- Adding a Named Partition
+- Dropping Old Data
+- When Not to Partition
+- CTE — Common Table Expressions
+- Why CTEs Matter
+- CTE Syntax
+- CTE Practical Queries
+- Recursive CTE — Tree & Hierarchy Traversal
+- When You Need Recursion
+- Recursive CTE Syntax
+- A Setup Table for Examples
+- Recursive CTE Practical Queries
+- Termination
+- Window Functions — ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD
+- The Core Distinction
+- The OVER (...) Clause
+- The Five Functions
+- Window Practical Queries
+- Where Window Functions Cannot Live
+- OVER (PARTITION BY … ORDER BY …) Mental Model
+- The Three Pieces of OVER
+- Putting It Together
+- OVER Practical Queries
+- GROUPING SETS, ROLLUP, CUBE — Multi-Level Aggregation
+- The Mental Model
+- GROUPING SETS — You Pick the Levels
+- ROLLUP — Hierarchical Subtotals
+- CUBE — Every Combination
+- The GROUPING() Function
+- Multi-Level Aggregation Practical Queries
+- Schema-specific note
+- FILTER (WHERE ...) on Aggregates
+- FILTER Syntax
+- FILTER Practical Queries
