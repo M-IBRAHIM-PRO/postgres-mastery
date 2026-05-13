@@ -1,4 +1,4 @@
-# Day 6 — Bullet 7: Reading Scan Types
+# Reading Scan Types
 
 Every `EXPLAIN` output starts with a **scan node** — how PostgreSQL pulls rows from a table. Four matter most. Knowing which one you got tells you whether your index strategy worked.
 
