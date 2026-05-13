@@ -151,7 +151,13 @@ SELECT
 FROM member_counts mc
 JOIN auth.organizations o ON o.id = mc.organization_id;
 ```
+#### Example Behavior
+If you are ranking a list of scores: 100, 100, 90, 80
+1. `rank()` results: 1, 1, 3, 4
+Since two people tied for 1st place, rank #2 is skipped, and the next person becomes #3.
 
+2. `dense_rank()` results: 1, 1, 2, 3
+  
 ### Example 4 — Time between consecutive projects with `LAG`
 
 ```sql
