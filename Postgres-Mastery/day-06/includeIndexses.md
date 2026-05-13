@@ -1,4 +1,4 @@
-# Day 6 — Bullet 4: Covering Indexes with `INCLUDE`
+# Covering Indexes with `INCLUDE`
 
 A covering index stores **extra columns alongside the index key** so the query can be answered from the index alone — no trip back to the table heap.
 
