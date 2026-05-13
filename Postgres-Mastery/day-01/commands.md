@@ -28,6 +28,11 @@
 \dt
 ```
 
+To see all the tables :
+```sql
+\dt *.*
+```
+
 ---
 
 ## Describe table
