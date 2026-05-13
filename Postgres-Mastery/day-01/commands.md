@@ -1,3 +1,9 @@
+## Open psql termianl
+
+```sql
+sudo -u postgres psql
+```
+
 ## List databases
 
 ```sql id="g4u7px"
