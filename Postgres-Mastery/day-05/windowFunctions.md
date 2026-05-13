@@ -212,4 +212,8 @@ Without tiebreaker, rows with identical `created_at` could swap positions across
 
 ## Where Window Functions Cannot Live
 
-Window functions can only appear in `SELECT` and `ORDER BY` — **not** `WHERE`, `GROUP BY`, `HAVING`. Wrap in a CTE/subquery to filter on a window result. Reason and pattern: [[day-05 - FAQs#8. Why can't I use a window function in `WHERE`?]].
+Window functions can :
+- appear in `SELECT` and `ORDER BY`
+- **not** appear in`WHERE`, `GROUP BY`, `HAVING`.
+
+Wrap in a CTE/subquery to filter on a window result. Reason and pattern: [[day-05 - FAQs#8. Why can't I use a window function in `WHERE`?]].
