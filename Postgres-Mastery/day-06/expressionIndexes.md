@@ -1,4 +1,4 @@
-# Day 6 — Bullet 3: Expression Indexes
+# Expression Indexes
 
 An index built on the **result of an expression**, not a raw column. Required when your query filters on a transformed value — otherwise PostgreSQL falls back to a sequential scan.
 
